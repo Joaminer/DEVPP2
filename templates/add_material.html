@@ -1,0 +1,66 @@
+<!-- templates/add_material.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Material</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('view_materials') }}">Ver Materiales</a></li>
+        </ul>
+    </nav>
+    <h1>Agregar Material al Depósito</h1>
+    <form method="POST" action="{{ url_for('add_material') }}">
+        <label for="codigo_barras">Código de Barras:</label>
+        <input type="text" id="codigo_barras" name="codigo_barras" autocomplete="false" required autofocus><br><br>
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="estado">Estado:</label>
+        <select id="estado" name="estado">
+            <option value="Nuevo">Nuevo</option>
+            <option value="Usado">Usado</option>
+            <option value="Dañado">Dañado</option>
+        </select><br><br>
+
+        <label for="tipo">Tipo:</label>
+        <select id="tipo" name="tipo">
+            <option value="Herramienta">Herramienta</option>
+            <option value="Insumo">Insumo</option>
+        </select><br><br>
+
+        <label for="ubicacion">Ubicación:</label>
+        <input type="text" id="ubicacion" name="ubicacion" required><br><br>
+
+        <input type="submit" value="Agregar">
+    </form>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyAYWVmWXvw8a0gAAw9WNlK-JC_9qurSh_c",
+          authDomain: "sgdd-ok.firebaseapp.com",
+          databaseURL: "https://sgdd-ok-default-rtdb.firebaseio.com",
+          projectId: "sgdd-ok",
+          storageBucket: "sgdd-ok.appspot.com",
+          messagingSenderId: "594609580163",
+          appId: "1:594609580163:web:036af9a412d132657313b6",
+          measurementId: "G-MNBCT8X4BV"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+      </script>
+</body>
+</html>

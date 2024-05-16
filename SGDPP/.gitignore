@@ -1,0 +1,17 @@
+# Entorno virtual
+venv/
+SGDPP/
+
+# Archivos de configuración del entorno
+.env
+
+# Archivos de bases de datos locales
+instance/
+
+# Archivos temporales
+*.pyc
+__pycache__/
+
+# Archivos de configuración de IDE
+.idea/
+.vscode/

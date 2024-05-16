@@ -1,0 +1,34 @@
+<!-- templates/view_materials.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Materiales</title>
+</head>
+<body>
+    <h1>Lista de Materiales</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Código de Barras</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Tipo</th>
+                <th>Ubicación</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in materials %}
+            <tr>
+                <td>{{ material.codigo_barras }}</td>
+                <td>{{ material.nombre }}</td>
+                <td>{{ material.estado }}</td>
+                <td>{{ material.tipo }}</td>
+                <td>{{ material.ubicacion }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
