@@ -15,3 +15,6 @@ __pycache__/
 # Archivos de configuración de IDE
 .idea/
 .vscode/
+
+firebaseConfig.json
+sgdd-ok-firebase-adminsdk-gcox3-fa0fd4b026.json
