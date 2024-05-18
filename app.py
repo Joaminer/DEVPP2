@@ -72,4 +72,6 @@ def start_scheduler():
 
 if __name__ == '__main__':
     start_scheduler()
-    app.run(debug=True)
+    app.run(debug=False, host='0.0.0.0', port=4564)
+# Cambia 5000 al puerto que desees utilizar
+
