@@ -1,30 +1,39 @@
-# app.py
-# Importar las bibliotecas necesarias
-from flask import Flask, render_template, request, redirect, url_for
-import firebase_admin
-from firebase_admin import credentials, db
-from models import db as local_db, Material
-import os
+import requests
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_sqlalchemy import SQLAlchemy
+from apscheduler.schedulers.background import BackgroundScheduler
+from flask_migrate import Migrate
+from models import local_db, Material  # Importa desde models.py
 
-# Crear la aplicación Flask
 app = Flask(__name__)
 
-# Inicializar Firebase Admin SDK
-cred = credentials.Certificate("sgdd-ok-firebase-adminsdk-gcox3-fa0fd4b026.json")
-firebase_admin.initialize_app(cred, {
-    'databaseURL': 'https://sgdd-ok-default-rtdb.firebaseio.com/'
-})
-
-# Configurar la base de datos local (SQLite)
+# Configuración de la base de datos local (SQLite)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/Irma/Desktop/TEP_V6/PP/DEVPP2/instance/materials.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Inicializar la base de datos local (SQLite) y Flask-Migrate
 local_db.init_app(app)
+migrate = Migrate(app, local_db)
 
-# Crear las tablas de la base de datos local antes de la primera solicitud
-with app.app_context():
-    local_db.create_all()
+# Variable para verificar si las tablas ya se han creado
+tables_created = False
 
-# Definir las rutas de la aplicación Flask
+@app.before_request
+def create_local_tables():
+    global tables_created
+    if not tables_created:
+        with app.app_context():
+            local_db.create_all()
+        tables_created = True
+
+# Función para verificar la conexión a internet
+def is_internet_available():
+    try:
+        requests.get("http://www.google.com", timeout=3)
+        return True
+    except requests.ConnectionError:
+        return False
+
 @app.route('/add_material', methods=['GET', 'POST'])
 def add_material():
     if request.method == 'POST':
@@ -34,19 +43,17 @@ def add_material():
         tipo = request.form['tipo']
         ubicacion = request.form['ubicacion']
 
-        # Escribir en Firebase Realtime Database
-        db.reference('materials').push({
-            'codigo_barras': codigo_barras,
-            'nombre': nombre,
-            'estado': estado,
-            'tipo': tipo,
-            'ubicacion': ubicacion
-        })
+        # Verificar si ya existe un material con el mismo código de barras
+        existing_material = Material.query.filter_by(codigo_barras=codigo_barras).first()
+        if existing_material:
+            flash('Ya existe un material con el mismo código de barras.', 'error')
+            return redirect(url_for('add_material'))
 
         # Guardar en la base de datos local
         new_material = Material(codigo_barras=codigo_barras, nombre=nombre, estado=estado, tipo=tipo, ubicacion=ubicacion)
         local_db.session.add(new_material)
         local_db.session.commit()
+        print(f'Datos guardados en la base de datos local: {codigo_barras}, {nombre}, {estado}, {tipo}, {ubicacion}')
 
         return redirect(url_for('add_material'))
 
@@ -56,13 +63,13 @@ def add_material():
 def view_materials():
     # Leer desde la base de datos local
     materials = Material.query.all()
+    return render_template('view_materials.html', materials=materials)
 
-    # Leer desde Firebase Realtime Database
-    materials_firebase = db.reference('materials').get()
+def start_scheduler():
+    scheduler = BackgroundScheduler()
+    # Puedes definir más tareas aquí si es necesario
+    scheduler.start()
 
-    return render_template('view_materials.html', materials=materials, materials_firebase=materials_firebase)
-
-
-# Ejecutar la aplicación Flask si se ejecuta como script principal
 if __name__ == '__main__':
+    start_scheduler()
     app.run(debug=True)

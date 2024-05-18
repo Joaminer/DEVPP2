@@ -1,14 +1,11 @@
-# models.py
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+local_db = SQLAlchemy()
 
-class Material(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    codigo_barras = db.Column(db.String(100), nullable=False, unique=True)
-    nombre = db.Column(db.String(100), nullable=False)
-    estado = db.Column(db.String(50), nullable=False)
-    tipo = db.Column(db.String(50), nullable=False)
-    ubicacion = db.Column(db.String(100), nullable=False)
-
-
+class Material(local_db.Model):
+    id = local_db.Column(local_db.Integer, primary_key=True)
+    codigo_barras = local_db.Column(local_db.String(50), unique=True, nullable=False)
+    nombre = local_db.Column(local_db.String(100), nullable=False)
+    estado = local_db.Column(local_db.String(50), nullable=False)
+    tipo = local_db.Column(local_db.String(50), nullable=False)
+    ubicacion = local_db.Column(local_db.String(100), nullable=False)
