@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Configuración de la base de datos local (SQLite)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///C:/Users/Irma/Desktop/TEP_V6/PP/DEVPP2/instance/materials.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializar la base de datos local (SQLite) y Flask-Migrate
 local_db.init_app(app)
