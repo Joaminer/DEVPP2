@@ -8,7 +8,7 @@ from models import local_db, Material  # Importa desde models.py
 app = Flask(__name__)
 
 # Configuración de la base de datos local (SQLite)
-app.config['SQLALCHEMY_DATABASE_URI'] = ''
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///materials.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Inicializar la base de datos local (SQLite) y Flask-Migrate
@@ -73,5 +73,4 @@ def start_scheduler():
 if __name__ == '__main__':
     start_scheduler()
     app.run(debug=False, host='0.0.0.0', port=4564)
-# Cambia 5000 al puerto que desees utilizar
-
+# Cambia 4564 al puerto que desees utilizar
